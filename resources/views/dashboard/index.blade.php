@@ -37,8 +37,10 @@
                             <div class="col-sm-6">
                                 @if (($product->product_stocks_sum_quantity ?? 0) > 10)
                                     <span class="btn d-block btn-primary">Available</span>
+                                @elseif (($product->product_stocks_sum_quantity ?? 0) == 0)
+                                    <span class="btn d-block btn-danger">Empty</span>
                                 @else
-                                    <span class="btn d-block btn-danger">Almost Empty</span>
+                                    <span class="btn d-block btn-warning">Almost Empty</span>
                                 @endif
                             </div>
                             <div class="col-sm-6">
@@ -46,7 +48,7 @@
                             </div>
                             <div class="col-sm-12 my-3">
                                 <a href="{{ route('products.transaction', $product) }}"
-                                    class="btn d-block btn-success">Transaction</a>
+                                    class="btn d-block btn-success">Decrease Stock</a>
                             </div>
                         </div>
                         <p class="card-text"><small class="text-muted">Last updated
