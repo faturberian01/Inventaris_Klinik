@@ -34,6 +34,12 @@ class AppServiceProvider extends ServiceProvider
                 $notifications[] = sprintf("[Almost Empty] %s stock is less than 10", $product->name);
             }
 
+            $notifProducts2 = Product::query()->latest()->select(['id', 'name'])->withSum('productStocks', 'quantity')->get()->where('product_stocks_sum_quantity', '=', 0);
+
+            foreach ($notifProducts2 as $product2) {
+                $notifications[] = sprintf("[Empty] %s stock is empty", $product->name);
+            }
+
             $notifStocks = Stock::query()
                 ->whereNotNull('expired_date')
                 ->whereDate('expired_date', '<=', today()->addDays(5))

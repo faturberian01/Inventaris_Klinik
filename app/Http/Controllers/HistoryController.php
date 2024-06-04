@@ -20,7 +20,7 @@ class HistoryController extends Controller
     public function index()
     {
         return view('histories.index', [
-            "title" => "Histories",
+            "title" => "History",
             'histories' => History::with('product')->latest()->get()
         ]);
     }

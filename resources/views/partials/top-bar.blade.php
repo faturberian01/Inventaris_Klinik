@@ -73,7 +73,7 @@
                 href="{{ route('histories.index') }}">
                 {{-- <i class="fas fa-fw fa-tachometer-alt"></i> --}}
                 <div class="d-flex flex-column align-items-center justify-content-center">
-                    <span class="mb-1">Histories</span>
+                    <span class="mb-1">History</span>
                     @if (request()->routeIs('histories.*'))
                         <span style="width: 50px; border-radius: 5px; border: 1px solid #EEE;"></span>
                     @endif
