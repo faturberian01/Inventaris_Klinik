@@ -27,7 +27,10 @@
                             <x-forms.textarea name="description" readonly
                                 disabled>{{ old('description', $product->description) }}</x-forms.textarea>
                         </div>
-
+                        <div class="mb-3">
+                            <x-forms.label id="name">Price</x-forms.label>
+                            <x-forms.input name="name" readonly disabled :value="old('price', $product->price)" />
+                        </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="mb-3">

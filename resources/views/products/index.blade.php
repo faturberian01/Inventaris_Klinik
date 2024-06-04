@@ -30,8 +30,8 @@
                                     <th>Code</th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Type</th>
                                     <th>Price</th>
+                                    <th>Type</th>
                                     <th>Photo</th>
                                     <th>Actions</th>
                                 </tr>
