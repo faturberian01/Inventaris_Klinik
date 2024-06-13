@@ -36,19 +36,23 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 @if (($product->product_stocks_sum_quantity ?? 0) > 10)
-                                    <span class="btn d-block btn-primary">Available</span>
+                                    <span class="btn d-block btn-outline-success no-hover">Available</span>
                                 @elseif (($product->product_stocks_sum_quantity ?? 0) == 0)
-                                    <span class="btn d-block btn-danger">Empty</span>
+                                    <span class="btn d-block btn-outline-danger no-hover">Empty</span>
                                 @else
-                                    <span class="btn d-block btn-warning">Almost Empty</span>
+                                    <span class="btn d-block btn-outline-warning no-hover">Almost Empty</span>
                                 @endif
-                            </div>
+                            </div>     
                             <div class="col-sm-6">
                                 <a href="{{ route('products.detail', $product) }}" class="btn d-block btn-info">Detail</a>
                             </div>
                             <div class="col-sm-12 my-3">
-                                <a href="{{ route('products.transaction', $product) }}"
-                                    class="btn d-block btn-success">Decrease Stock</a>
+                                {{ $product->type }}
+                                @if ($product->type == 'medicine')
+                                <a href="{{ route('products.transaction', $product) }}" class="btn d-block btn-success">Transaction Stock</a>
+                            @else
+                                <a href="{{ route('products.transaction', $product) }}" class="btn d-block btn-success">Decrease Stock</a>
+                            @endif
                             </div>
                         </div>
                         <p class="card-text"><small class="text-muted">Last updated

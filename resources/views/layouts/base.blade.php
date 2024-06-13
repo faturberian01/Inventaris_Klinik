@@ -22,6 +22,12 @@
 
 
     <title>{{ $title }} | MA Medika</title>
+    <style>
+        .no-hover {
+            pointer-events: none; /* Disable all mouse events */
+        }
+    </style>
+    
 </head>
 
 <body class="@yield('body-classes', '')" id="page-top">
