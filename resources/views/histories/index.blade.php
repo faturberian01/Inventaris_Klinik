@@ -31,6 +31,7 @@
                                     <th>Date</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
+                                    <th>Explanation</th>
                                     <th>Created at</th>
                                 </tr>
                             </thead>
@@ -44,6 +45,7 @@
                                         <td>{{ $history->date->format('d F Y') }}</td>
                                         <td>{{ number_format($history->quantity) }}</td>
                                         <td>{{ \App\Helpers\BasicHelper::getRupiahFormat($history->total) }}</td>
+                                        <td>{{ $history->reason}}</td>
                                         <td>{{ $history->created_at->translatedFormat('d F Y H:i') }}</td>
                                     </tr>
                                 @endforeach

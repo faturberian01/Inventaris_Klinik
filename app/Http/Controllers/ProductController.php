@@ -9,6 +9,7 @@ use App\Models\Stock;
 use App\Services\StorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
@@ -160,6 +161,7 @@ class ProductController extends Controller
             'total' => ['required', 'numeric', 'min:0'],
             'quantity' => ['required', 'numeric', 'min:1', 'max:' . intval($totalStocks ?? 0)],
             'date' => ['required', 'date'],
+            'reason' => ['required','string'],
         ]);
 
         try {
@@ -205,6 +207,60 @@ class ProductController extends Controller
             throw $ex;
         }
     }
+
+    public function decreasePost(Request $request, Product $product)
+{
+    $totalStocks = $product->loadSum('productStocks', 'quantity')?->product_stocks_sum_quantity ?? 0;
+
+    $validatedData = $request->validate([
+        'total' => ['required', 'numeric', 'min:0'],
+        'quantity' => ['required', 'numeric', 'min:1', 'max:' . intval($totalStocks)],
+        'date' => ['required', 'date'],
+        'reason' => ['required','string'],
+    ]);
+
+    try {
+        $quantity = intval($validatedData['quantity']);
+
+        DB::beginTransaction();
+        
+        // Reset last_new_stocks field
+        $product->update([
+            'last_new_stocks' => null
+        ]);
+
+        // Retrieve the oldest stocks first
+        $productStocks = Stock::query()->where('product_id', $product->id)->where('quantity', '>', 0)->oldest()->get();
+
+        foreach ($productStocks as $stock) {
+            if ($quantity > 0) {
+                if ($quantity > $stock->quantity) {
+                    $stockQuantity = $stock->quantity;
+                    $stock->update([
+                        'quantity' => 0
+                    ]);
+                    $quantity -= $stockQuantity;
+                } else {
+                    $stock->decrement('quantity', $quantity);
+                    $quantity = 0;
+                }
+            } else {
+                break;
+            }
+        }
+
+        History::create(array_merge($validatedData, [
+            'product_id' => $product->id,
+        ]));
+        
+        DB::commit();
+        return redirect()->route('dashboard.index')->with('success', 'Product decrease success!');
+    } catch (\Exception $ex) {
+        DB::rollBack();
+        return back()->withErrors(['msg' => 'Error during decrease operation: ' . $ex->getMessage()]);
+    }
+}
+
 
     public function detail(Product $product)
     {

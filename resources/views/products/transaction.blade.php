@@ -10,7 +10,7 @@
                 </div>
                 <form action="{{ route('products.transaction', $product) }}" method="post">
                     @csrf
-
+                    <input type="hidden" name="reason" value="Transaction Success">
                     <div class="card-body">
                         <div class="mb-3">
                             <x-forms.label id="code">Code</x-forms.label>
@@ -50,6 +50,8 @@
                             <x-forms.label id="total">Total</x-forms.label>
                             <x-forms.input type="number" name="total" :value="old('total', 0)" id="total" />
                         </div>
+
+                        
                     </div>
 
                     <div class="card-footer d-flex justify-content-end">

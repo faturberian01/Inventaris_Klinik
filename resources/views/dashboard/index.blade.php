@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-sm-12 my-3">
                 
-                                @if ($product->type->value == 'medicine')
+                                @if ($product->type->value == 'tool')
                                 <a href="{{ route('products.decrease', $product) }}" class="btn d-block btn-success">Decrease Stock</a>
                             @else
                                 <a href="{{ route('products.transaction', $product) }}" class="btn d-block btn-success">Trasaction</a>

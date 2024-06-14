@@ -8,7 +8,7 @@
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Form {{ $title }}</h6>
                 </div>
-                <form action="{{ route('products.transaction', $product) }}" method="post">
+                <form action="{{ route('products.decrease', $product) }}" method="post">
                     @csrf
 
                     <div class="card-body">
@@ -53,7 +53,7 @@
 
                         <div class="mb-3">
                                 <x-forms.label id="reason">Reason</x-forms.label>
-                                <x-forms.textarea name="reason"></x-forms.textarea>
+                                <x-forms.textarea name="reason" :value="old('reason')"></x-forms.textarea>
                         </div>
                     </div>
 
