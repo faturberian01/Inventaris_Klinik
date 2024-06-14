@@ -140,6 +140,16 @@ class ProductController extends Controller
             "title" => "Product Transaction",
             "product" => $product,
         ]);
+
+    }
+
+    public function decrease(Product $product)
+    {
+        return view('products.decrease', [
+            "title" => "Product Decrease",
+            "product" => $product,
+        ]);
+
     }
 
     public function transactionPost(Request $request, Product $product)

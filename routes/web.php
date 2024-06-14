@@ -45,6 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/{product}/transaction', [ProductController::class, 'transaction'])
         ->name('products.transaction');
     Route::post('/products/{product}/transaction', [ProductController::class, 'transactionPost']);
+    Route::get('/products/{product}/decrease', [ProductController::class, 'decrease'])
+        ->name('products.decrease');
+    Route::post('/products/{product}/decrease', [ProductController::class, 'decreasePost']);
     Route::get('/products/{product}/detail', [ProductController::class, 'detail'])
         ->name('products.detail');
     Route::delete('/products/{product}/{stock}', [ProductController::class, 'destroyStock'])

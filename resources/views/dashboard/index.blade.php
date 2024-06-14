@@ -47,9 +47,9 @@
                                 <a href="{{ route('products.detail', $product) }}" class="btn d-block btn-info">Detail</a>
                             </div>
                             <div class="col-sm-12 my-3">
-                                {{ $product->type }}
-                                @if ($product->type == 'medicine')
-                                <a href="{{ route('products.transaction', $product) }}" class="btn d-block btn-success">Decrease Stock</a>
+                
+                                @if ($product->type->value == 'medicine')
+                                <a href="{{ route('products.decrease', $product) }}" class="btn d-block btn-success">Decrease Stock</a>
                             @else
                                 <a href="{{ route('products.transaction', $product) }}" class="btn d-block btn-success">Trasaction</a>
                             @endif

@@ -50,8 +50,14 @@
                             <x-forms.label id="total">Total</x-forms.label>
                             <x-forms.input type="number" name="total" :value="old('total', 0)" id="total" />
                         </div>
+
+                        <div class="mb-3">
+                                <x-forms.label id="reason">Reason</x-forms.label>
+                                <x-forms.textarea name="reason"></x-forms.textarea>
+                        </div>
                     </div>
 
+                    
                     <div class="card-footer d-flex justify-content-end">
                         <div class="btn-group">
                             <a href="{{ route('dashboard.index') }}" class="btn btn-danger font-weight-bold">
