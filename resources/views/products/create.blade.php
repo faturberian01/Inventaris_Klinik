@@ -49,11 +49,11 @@
                     </div>
 
                     <div class="card-footer d-flex justify-content-end">
-                        <div class="btn-group">
-                            <a href="{{ route('products.index') }}" class="btn btn-danger font-weight-bold">
+                        <div class="">
+                            <a href="{{ route('products.index') }}" class="btn btn-danger font-weight-bold me-2">
                                 Cancel</a>
                             <button type="submit" class="btn btn-primary font-weight-bold">
-                                Add
+                                Submit
                             </button>
                         </div>
                     </div>
