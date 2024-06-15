@@ -64,7 +64,6 @@
                                                                                 <label for="reason" class="form-label">Reason</label>
                                                                                 <select class="form-control" name="reason" id="reason" required>
                                                                                     <option value="" hidden>Choose Reason</option>
-                                                                                    <option value="Destroy">Destroy</option>
                                                                                     <option value="Broken">Broken</option>
                                                                                     <option value="Lost">Lost</option>
                                                                                     <option value="Return">Return</option>

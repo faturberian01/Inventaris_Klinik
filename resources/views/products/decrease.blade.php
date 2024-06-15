@@ -55,7 +55,6 @@
                             <x-forms.label id="reason">Reason</x-forms.label>
                             <select class="form-control" name="reason" id="reason">
                                 <option value="" hidden>Choose Reason</option>
-                                <option value="Destroy">Destroy</option>
                                 <option value="Broken">Broken</option>
                                 <option value="Lost">Lost</option>
                                 <option value="Return">Return</option>
