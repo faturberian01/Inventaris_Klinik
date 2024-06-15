@@ -55,11 +55,11 @@
                     </div>
 
                     <div class="card-footer d-flex justify-content-end">
-                        <div class="btn-group">
+                        <div class="">
                             <a href="{{ route('dashboard.index') }}" class="btn btn-danger font-weight-bold">
                                 Cancel</a>
-                            <button type="submit" class="btn btn-primary font-weight-bold">
-                                Add
+                            <button type="submit" class="btn btn-primary font-weight-bold me-2">
+                                Submit
                             </button>
                         </div>
                     </div>
