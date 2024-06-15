@@ -52,8 +52,14 @@
                         </div>
 
                         <div class="mb-3">
-                                <x-forms.label id="reason">Reason</x-forms.label>
-                                <x-forms.textarea name="reason" :value="old('reason')"></x-forms.textarea>
+                            <x-forms.label id="reason">Reason</x-forms.label>
+                            <select class="form-control" name="reason" id="reason">
+                                <option value="" hidden>Choose Reason</option>
+                                <option value="Destroy">Destroy</option>
+                                <option value="Broken">Broken</option>
+                                <option value="Lost">Lost</option>
+                                <option value="Return">Return</option>
+                            </select>
                         </div>
                     </div>
 

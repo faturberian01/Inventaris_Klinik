@@ -209,57 +209,70 @@ class ProductController extends Controller
     }
 
     public function decreasePost(Request $request, Product $product)
-{
-    $totalStocks = $product->loadSum('productStocks', 'quantity')?->product_stocks_sum_quantity ?? 0;
-
-    $validatedData = $request->validate([
-        'total' => ['required', 'numeric', 'min:0'],
-        'quantity' => ['required', 'numeric', 'min:1', 'max:' . intval($totalStocks)],
-        'date' => ['required', 'date'],
-        'reason' => ['required','string'],
-    ]);
-
-    try {
-        $quantity = intval($validatedData['quantity']);
-
-        DB::beginTransaction();
-        
-        // Reset last_new_stocks field
-        $product->update([
-            'last_new_stocks' => null
+    {
+        $totalStocks = $product->loadSum('productStocks', 'quantity')?->product_stocks_sum_quantity ?? 0;
+    
+        $validatedData = $request->validate([
+            'quantity' => ['required', 'numeric', 'min:1', 'max:' . intval($totalStocks)],
+            'date' => ['required', 'date'],
+            'reason' => ['required', 'string', 'in:Destroy,Broken,Lost,Return'],
         ]);
-
-        // Retrieve the oldest stocks first
-        $productStocks = Stock::query()->where('product_id', $product->id)->where('quantity', '>', 0)->oldest()->get();
-
-        foreach ($productStocks as $stock) {
-            if ($quantity > 0) {
-                if ($quantity > $stock->quantity) {
-                    $stockQuantity = $stock->quantity;
-                    $stock->update([
-                        'quantity' => 0
-                    ]);
-                    $quantity -= $stockQuantity;
-                } else {
-                    $stock->decrement('quantity', $quantity);
-                    $quantity = 0;
-                }
-            } else {
-                break;
+    
+        try {
+            $quantity = intval($validatedData['quantity']);
+            $price = $product->price;
+            $reason = $validatedData['reason'];
+            $total = 0;
+    
+            // Adjust total based on reason
+            if ($reason != 'Return') {
+                $total = $quantity * $price;
+                $total = "-$total"; // Adding sign for negative total
             }
+    
+            DB::beginTransaction();
+            
+            // Reset last_new_stocks field
+            $product->update([
+                'last_new_stocks' => null
+            ]);
+    
+            // Retrieve the oldest stocks first
+            $productStocks = Stock::query()->where('product_id', $product->id)->where('quantity', '>', 0)->oldest()->get();
+    
+            foreach ($productStocks as $stock) {
+                if ($quantity > 0) {
+                    if ($quantity > $stock->quantity) {
+                        $stockQuantity = $stock->quantity;
+                        $stock->update([
+                            'quantity' => 0
+                        ]);
+                        $quantity -= $stockQuantity;
+                    } else {
+                        $stock->decrement('quantity', $quantity);
+                        $quantity = 0;
+                    }
+                } else {
+                    break;
+                }
+            }
+    
+            History::create([
+                'product_id' => $product->id,
+                'total' => $total,
+                'quantity' => $validatedData['quantity'],
+                'date' => $validatedData['date'],
+                'reason' => $validatedData['reason'],
+            ]);
+            
+            DB::commit();
+            return redirect()->route('dashboard.index')->with('success', 'Product decrease success!');
+        } catch (\Exception $ex) {
+            DB::rollBack();
+            return back()->withErrors(['msg' => 'Error during decrease operation: ' . $ex->getMessage()]);
         }
-
-        History::create(array_merge($validatedData, [
-            'product_id' => $product->id,
-        ]));
-        
-        DB::commit();
-        return redirect()->route('dashboard.index')->with('success', 'Product decrease success!');
-    } catch (\Exception $ex) {
-        DB::rollBack();
-        return back()->withErrors(['msg' => 'Error during decrease operation: ' . $ex->getMessage()]);
     }
-}
+    
 
 
     public function detail(Product $product)
@@ -272,12 +285,52 @@ class ProductController extends Controller
         ]);
     }
 
-    public function destroyStock(Product $product, Stock $stock)
-    {
+    public function destroyStock(Request $request, Product $product, Stock $stock)
+{
+    $validatedData = $request->validate([
+        'reason' => 'required|string|in:Destroy,Broken,Lost,Return',
+    ]);
+
+    try {
+        DB::beginTransaction();
+
+        $reason = $validatedData['reason'];
+        $quantity = $stock->quantity;
+        $price = $product->price;
+        $total = 0;
+
+        // // Adjust total based on reason
+        // if ($reason == 'retur') {
+        //     $total = "+$total"; // Adding sign for positive total
+        // } else {
+        //     $total = "-$total"; // Adding sign for negative total
+        // }
+
+        if ($reason != 'Return') {
+            $total = $quantity * $price;
+            $total = "-$total"; // Adding sign for negative total
+        }
+
+        $historyData = [
+            'product_id' => $product->id,
+            'reason' => $reason,
+            'quantity' => $quantity,
+            'date' => now(),
+            'total' => $total,
+        ];
+
+        History::create($historyData);
+
         $stock->delete();
 
-        return redirect()
-            ->route('products.detail', $stock->product_id)
-            ->with('success', 'Stock deleted!');
+        DB::commit();
+
+        return redirect()->route('products.detail', $product)->with('success', 'Stock deleted and history recorded!');
+    } catch (\Exception $ex) {
+        DB::rollBack();
+        return redirect()->route('products.detail', $product)->with('error', 'Failed to delete stock.');
     }
+}
+
+
 }

@@ -44,18 +44,43 @@
                                                 <td class="text-center">{{ $stock->created_at->format('d F Y H:i') }}
                                                 </td>
                                                 <td>
-                                                    <form
-                                                        action="{{ route('products.stock', [
-                                                            'product' => $product,
-                                                            'stock' => $stock,
-                                                        ]) }}"
-                                                        onsubmit="return confirm('Are you sure to delete this stock?')"
-                                                        method="POST" class="d-inline-block">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                            class="border-0 badge bg-danger text-white">delete</button>
-                                                    </form>
+                                                    <button type="button" class="border-0 badge bg-danger text-white" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $stock->id }}">
+                                                        Delete
+                                                    </button>
+
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="deleteModal-{{ $stock->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="deleteModalLabel">Delete Stock</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="{{ route('products.stock', ['product' => $product, 'stock' => $stock]) }}" method="POST" id="deleteForm-{{ $stock->id }}">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <div class="mb-3">
+                                                                            <label for="reason" class="form-label">Reason</label>
+                                                                            <select class="form-control" name="reason" id="reason" required>
+                                                                                <option value="" hidden>Choose Reason</option>
+                                                                                <option value="Destroy">Destroy</option>
+                                                                                <option value="Broken">Broken</option>
+                                                                                <option value="Lost">Lost</option>
+                                                                                <option value="Return">Return</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </form>
+                                                                    Are you sure to delete this stock?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-danger" onclick="document.getElementById('deleteForm-{{ $stock->id }}').submit();">Delete</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -70,10 +95,13 @@
                     <div class="btn-group">
                         <a href="{{ route('products.index') }}" class="btn btn-danger font-weight-bold">
                             Back</a>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+@endpush
