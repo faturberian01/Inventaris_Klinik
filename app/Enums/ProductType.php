@@ -10,12 +10,15 @@ enum ProductType: string
 {
     use InvokableCases, Names, Values;
 
+
+    case ALL = 'all';
     case MEDICINE = 'medicine';
     case TOOL = 'tool';
 
     public static function getList(): array
     {
         return [
+            self::ALL() => 'All',
             self::MEDICINE() => 'Obat',
             self::TOOL() => 'Alat',
         ];
@@ -24,14 +27,16 @@ enum ProductType: string
     public function getColor()
     {
         return match ($this) {
-            self::MEDICINE => 'primary',
-            self::TOOL => 'info',
+            self::ALL => 'primary',
+            self::MEDICINE => 'info',
+            self::TOOL => 'success',
         };
     }
 
     public function getTranslated(): string
     {
         return match ($this) {
+            self::ALL => '(Obat & Alat)',
             self::MEDICINE => 'Obat',
             self::TOOL => 'Alat',
         };

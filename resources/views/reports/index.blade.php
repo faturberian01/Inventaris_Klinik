@@ -37,15 +37,13 @@
                         </div>
                         <div class="mb-3">
                             <x-forms.label id="type">Type</x-forms.label>
-                            <x-forms.select name="type">
-                                <option value="">All</option>
+                            <x-forms.select name="type" required>
+                                <option value="all" @selected('all' == old('type', request('type'))) >All</option>
                                 @foreach (\App\Enums\ProductType::getList() as $key => $label)
-                                    <option value="{{ $key }}" @selected($key == old('type'))>{{ $label }}
-                                    </option>
+                                    <option value="{{ $key }}" @selected($key == old('type', request('type'))) >{{ $label }}</option>
                                 @endforeach
                             </x-forms.select>
                         </div>
-
                     </div>
 
                     <div class="card-footer d-flex justify-content-end">
@@ -53,7 +51,6 @@
                             <button type="submit" class="btn btn-primary font-weight-bold">
                                 Preview
                             </button>
-
                         </div>
                     </div>
                 </form>
@@ -71,13 +68,10 @@
 
                         <form action="{{ route('reports.index') }}" method="post" target="_blank">
                             @csrf
-
                             <input type="hidden" name="start_date"
                                 value="{{ old('start_date', request('start_date')) }}" />
-
                             <input type="hidden" name="end_date" value="{{ old('end_date', request('end_date')) }}" />
                             <input type="hidden" name="type" value="{{ old('type', request('type')) }}" />
-
                             <button type="submit" class="btn btn-primary font-weight-bold">
                                 Export to Excel
                             </button>
@@ -93,6 +87,7 @@
                                         <td>Product Code</td>
                                         <td>Product Name</td>
                                         <td>Product Type</td>
+                                        <td>Reason</td>
                                         <td>Quantity</td>
                                         <td>Price</td>
                                         <td>Total Price</td>
@@ -106,9 +101,9 @@
                                             <td>{{ $history->product->code }}</td>
                                             <td>{{ $history->product->name }}</td>
                                             <td>{{ $history->product->type->getTranslated() }}</td>
+                                            <td>{{ $history->reason}}</td>
                                             <td>{{ number_format($history->quantity) }}</td>
-                                            <td>{{ \App\Helpers\BasicHelper::getRupiahFormat($history->product->price) }}
-                                            </td>
+                                            <td>{{ \App\Helpers\BasicHelper::getRupiahFormat($history->product->price) }}</td>
                                             <td>{{ \App\Helpers\BasicHelper::getRupiahFormat($history->total) }}</td>
                                         </tr>
                                     @endforeach

@@ -31,7 +31,7 @@
                                     <th>Date</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
-                                    <th>Explanation</th>
+                                    <th>Reason</th>
                                     <th>Created at</th>
                                 </tr>
                             </thead>

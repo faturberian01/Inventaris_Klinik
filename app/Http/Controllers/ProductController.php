@@ -77,6 +77,10 @@ class ProductController extends Controller
             "title" => "Detail Product",
             "product" => $product,
         ]);
+
+        $product->load(['productStocks' => function($query) {
+            $query->where('quantity', '>', 0); // Only get stocks with quantity greater than 0
+        }]);
     }
 
     /**
