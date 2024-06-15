@@ -54,7 +54,7 @@
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
                                                                         <h5 class="modal-title" id="deleteModalLabel">Delete Stock</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <form action="{{ route('products.stock', ['product' => $product, 'stock' => $stock]) }}" method="POST" id="deleteForm-{{ $stock->id }}">
