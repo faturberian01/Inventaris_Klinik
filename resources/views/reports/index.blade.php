@@ -37,8 +37,8 @@
                         </div>
                         <div class="mb-3">
                             <x-forms.label id="type">Type</x-forms.label>
-                            <x-forms.select name="type" required>
-                                <option value="all" @selected('all' == old('type', request('type'))) >All</option>
+                            <x-forms.select name="type" required>           
+                                <!-- <option value="all" @selected('all' == old('type', request('type'))) >All</option> -->
                                 @foreach (\App\Enums\ProductType::getList() as $key => $label)
                                     <option value="{{ $key }}" @selected($key == old('type', request('type'))) >{{ $label }}</option>
                                 @endforeach

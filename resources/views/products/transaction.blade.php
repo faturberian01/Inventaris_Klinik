@@ -29,7 +29,7 @@
                         </div>
                         <div class="mb-3">
                             <x-forms.label id="name">Price</x-forms.label>
-                            <x-forms.input name="name" readonly disabled :value="old('price', $product->price)" />
+                            <x-forms.input name="name" readonly disabled :value="old('price', \App\Helpers\BasicHelper::getRupiahFormat($product->price))" />
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -48,7 +48,7 @@
 
                         <div class="mb-3">
                             <x-forms.label id="total">Total</x-forms.label>
-                            <x-forms.input type="number" name="total" :value="old('total', 0)" id="total" />
+                            <x-forms.input type="number" name="total" :value="old('total', 0)" id="total"  readonly/>
                         </div>
 
                         
