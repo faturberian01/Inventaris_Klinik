@@ -292,7 +292,7 @@ class ProductController extends Controller
     public function destroyStock(Request $request, Product $product, Stock $stock)
 {
     $validatedData = $request->validate([
-        'reason' => 'required|string|in:Destroy,Broken,Lost,Return',
+        'reason' => 'required|string|in:Destroy,Broken,Lost,Expireted,Return',
     ]);
 
     try {

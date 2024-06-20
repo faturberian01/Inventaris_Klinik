@@ -56,7 +56,7 @@
                                                                         <h5 class="modal-title" id="deleteModalLabel">Delete Stock</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
                                                                     </div>
-                                                                    <div class="modal-body">
+                                                                    <div class="modal-body" data-product-type="{{ $product->type }}">
                                                                         <form action="{{ route('products.stock', ['product' => $product, 'stock' => $stock]) }}" method="POST" id="deleteForm-{{ $stock->id }}">
                                                                             @csrf
                                                                             @method('DELETE')
@@ -66,6 +66,7 @@
                                                                                     <option value="" hidden>Choose Reason</option>
                                                                                     <option value="Broken">Broken</option>
                                                                                     <option value="Lost">Lost</option>
+                                                                                    <option value="Expireted">Expireted</option>
                                                                                     <option value="Return">Return</option>
                                                                                 </select>
                                                                             </div>
@@ -104,4 +105,21 @@
 
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalBodies = document.querySelectorAll('.modal-body');
+
+            modalBodies.forEach(modalBody => {
+                const productType = modalBody.getAttribute('data-product-type');
+                const reasonSelect = modalBody.querySelector('#reason');
+
+                if (productType === 'tool') {
+                    const expiredOption = reasonSelect.querySelector('option[value="Expireted"]');
+                    if (expiredOption) {
+                        expiredOption.remove();
+                    }
+                }
+            });
+        });
+    </script>
 @endpush
