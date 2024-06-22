@@ -73,7 +73,7 @@
             </tr>
         @endforeach
         <tr>
-            <td colspan="5" style="text-align: center;">Total</td>
+            <td colspan="6" style="text-align: center;">Total</td>
             <td style="text-align: center;">{{ number_format($quantityProfit) }}</td>
             <td></td>
             <td style="text-align: center;">{{ \App\Helpers\BasicHelper::getRupiahFormat($totalProfit) }}</td>
@@ -121,7 +121,7 @@
             </tr>
         @endforeach
         <tr>
-            <td colspan="5" style="text-align: center;">Total</td>
+            <td colspan="6" style="text-align: center;">Total</td>
             <td style="text-align: center;">{{ number_format($quantityLoss) }}</td>
             <td></td>
             <td style="text-align: center;">{{ \App\Helpers\BasicHelper::getRupiahFormat($totalLoss) }}</td>
@@ -168,7 +168,7 @@
             </tr>
         @endforeach
         <tr>
-            <td colspan="5" style="text-align: center;">Total</td>
+            <td colspan="6" style="text-align: center;">Total</td>
             <td style="text-align: center;">{{ number_format($quantityReturn) }}</td>
             <td></td>
             <td style="text-align: center;">{{ \App\Helpers\BasicHelper::getRupiahFormat($totalReturn) }}</td>
