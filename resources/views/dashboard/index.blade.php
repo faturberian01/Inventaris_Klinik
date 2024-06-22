@@ -51,7 +51,7 @@
                                 @if ($product->type->value == 'tool')
                                 <a href="{{ route('products.decrease', $product) }}" class="btn d-block btn-success">Decrease Stock</a>
                             @else
-                                <a href="{{ route('products.transaction', $product) }}" class="btn d-block btn-success">Trasaction</a>
+                                <a href="{{ route('products.transaction', $product) }}" class="btn d-block btn-success">Transaction</a>
                             @endif
                             </div>
                         </div>

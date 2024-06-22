@@ -1,16 +1,22 @@
 @php
     $profits = $histories->filter(function($history) {
-        return $history->total >= 0;
+        return $history->total > 0;
     });
 
     $losses = $histories->filter(function($history) {
         return $history->total < 0;
     });
+    $returns = $histories->filter(function($history) {
+        return $history->reason === 'Return';
+    });
+
 
     $totalProfit = 0;
     $totalLoss = 0;
     $quantityProfit = 0;
     $quantityLoss = 0;
+    $totalReturn = 0;
+    $quantityReturn = 0;
 @endphp
 
 <table border="1">
@@ -122,4 +128,52 @@
         </tr>
     </tbody>
 </table>
+
+<table border="1">
+    <thead>
+        <tr>
+            <td colspan="6" style="text-align: center;">Return</td>
+        </tr>
+        <tr>
+            <td colspan="6" style="text-align: center;"></td>
+        </tr>
+        <tr>
+            <td>No</td>
+            <td>Date</td>
+            <td>Product Code</td>
+            <td>Product Name</td>
+            <td>Product Type</td>
+            <td>Reason</td>
+            <td>Quantity</td>
+            <td>Price</td>
+            <td>Total Price</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($returns as $history)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $history->date->format('d F Y') }}</td>
+                <td>{{ $history->product->code }}</td>
+                <td>{{ $history->product->name }}</td>
+                <td>{{ $history->product->type->getTranslated() }}</td>
+                <td>{{ $history->reason}}</td>
+                <td>{{ number_format($history->quantity) }}</td>
+                <td>{{ \App\Helpers\BasicHelper::getRupiahFormat($history->product->price) }}</td>
+                <td>{{ \App\Helpers\BasicHelper::getRupiahFormat($history->total) }}</td>
+                @php
+                    $quantityReturn += $history->quantity;
+                    $totalReturn += $history->total;
+                @endphp
+            </tr>
+        @endforeach
+        <tr>
+            <td colspan="5" style="text-align: center;">Total</td>
+            <td style="text-align: center;">{{ number_format($quantityReturn) }}</td>
+            <td></td>
+            <td style="text-align: center;">{{ \App\Helpers\BasicHelper::getRupiahFormat($totalReturn) }}</td>
+        </tr>
+    </tbody>
+</table>
+
 

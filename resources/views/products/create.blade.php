@@ -36,11 +36,13 @@
                             <x-forms.label id="type">Type</x-forms.label>
                             <x-forms.select name="type">
                                 @foreach (\App\Enums\ProductType::getList() as $key => $label)
-                                    <option value="{{ $key }}" @selected($key == old('type'))>{{ $label }}
-                                    </option>
+                                    @if ($key !== \App\Enums\ProductType::ALL->value)
+                                        <option value="{{ $key }}" @selected($key == old('type'))>{{ $label }}</option>
+                                    @endif
                                 @endforeach
                             </x-forms.select>
                         </div>
+
 
                         <div class="mb-3">
                             <x-forms.label id="photo">Photo</x-forms.label>

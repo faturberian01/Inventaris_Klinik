@@ -66,7 +66,7 @@
                                                                                     <option value="" hidden>Choose Reason</option>
                                                                                     <option value="Broken">Broken</option>
                                                                                     <option value="Lost">Lost</option>
-                                                                                    <option value="Expireted">Expireted</option>
+                                                                                    <option value="Expired">Expired</option>
                                                                                     <option value="Return">Return</option>
                                                                                 </select>
                                                                             </div>
