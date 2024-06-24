@@ -16,85 +16,66 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
         $histories = [];
-    
-        if (request('preview')) {
-            $validatedData = request()->validate([
+        if ($request->has('preview')) {
+            $validatedData = $request->validate([
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date',
                 'type' => ['required', Rule::in(array_merge(['all'], ProductType::values()))],
             ]);
-    
-            if ($validatedData['type'] === 'all') {
-                $histories = History::query()
-                    ->with('product')
-                    ->whereDate('date', '>=', $validatedData['start_date'])
-                    ->whereDate('date', '<=', $validatedData['end_date'])
-                    ->orderByDesc('date')
-                    ->get();
-            } else {
-                $productIds = Product::query()
-                    ->where('type', $validatedData['type'])
-                    ->pluck('id');
-    
-                $histories = History::query()
-                    ->with('product')
-                    ->whereDate('date', '>=', $validatedData['start_date'])
-                    ->whereDate('date', '<=', $validatedData['end_date'])
-                    ->whereIn('product_id', $productIds)
-                    ->orderByDesc('date')
-                    ->get();
-            }
+
+            $histories = $this->getHistories($validatedData['start_date'], $validatedData['end_date'], $validatedData['type']);
         }
-    
+
         return view('reports.index', [
             "title" => "Report",
             'histories' => $histories
         ]);
     }
-    
 
     public function reportPost(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'type' => ['required', Rule::in(array_merge(['all'], ProductType::values()))],
         ]);
-    
-        $histories = [];
-    
-        if ($request->input('type') === 'all') {
-            $histories = History::query()
-                ->with('product')
-                ->whereDate('date', '>=', $validatedData['start_date'])
-                ->whereDate('date', '<=', $validatedData['end_date'])
+
+        $histories = $this->getHistories($request->start_date, $request->end_date, $request->type);
+
+        $startDate = Carbon::parse($request->start_date);
+        $endDate = Carbon::parse($request->end_date);
+
+        return Excel::download(new HistoryExport($histories, $startDate, $endDate), 'REPORT.xlsx');
+    }
+
+    public function exportAll()
+    {
+        $histories = History::with('product')->orderByDesc('date')->get();
+        $startDate = Carbon::minValue();
+        $endDate = Carbon::now();
+
+        return Excel::download(new HistoryExport($histories, $startDate, $endDate), 'REPORT_ALL.xlsx');
+    }
+
+    private function getHistories($startDate, $endDate, $type)
+    {
+        if ($type === 'all') {
+            return History::with('product')
+                ->whereDate('date', '>=', $startDate)
+                ->whereDate('date', '<=', $endDate)
                 ->orderByDesc('date')
                 ->get();
         } else {
-            $productIds = Product::query()
-                ->where('type', $validatedData['type'])
-                ->pluck('id');
-    
-            $histories = History::query()
-                ->with('product')
-                ->whereDate('date', '>=', $validatedData['start_date'])
-                ->whereDate('date', '<=', $validatedData['end_date'])
+            $productIds = Product::where('type', $type)->pluck('id');
+            return History::with('product')
+                ->whereDate('date', '>=', $startDate)
+                ->whereDate('date', '<=', $endDate)
                 ->whereIn('product_id', $productIds)
                 ->orderByDesc('date')
                 ->get();
         }
-    
-        $startDate = Carbon::parse($validatedData['start_date']);
-        $endDate = Carbon::parse($validatedData['end_date']);
-    
-        return Excel::download(new HistoryExport($histories, $startDate, $endDate), 'REPORT.xlsx');
     }
 }

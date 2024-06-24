@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])
         ->name('reports.index');
     Route::post('/reports', [ReportController::class, 'reportPost']);
+    Route::post('/reports/export-all', [ReportController::class, 'exportAll'])->name('reports.exportAll');
 
     Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
