@@ -114,7 +114,7 @@
                 const reasonSelect = modalBody.querySelector('#reason');
 
                 if (productType === 'tool') {
-                    const expiredOption = reasonSelect.querySelector('option[value="Expireted"]');
+                    const expiredOption = reasonSelect.querySelector('option[value="Expired"]');
                     if (expiredOption) {
                         expiredOption.remove();
                     }
